@@ -91,9 +91,9 @@ fun PatientNavigation() {
 
                 0 -> PatientDashboard()
 
-                1 -> PaginaProvisoria("Histórico")
+                1 -> PatientHistory()
 
-                2 -> PaginaProvisoria("Alertas")
+                2 -> PatientAlerts()
 
                 3 -> PaginaProvisoria("O meu médico")
 
