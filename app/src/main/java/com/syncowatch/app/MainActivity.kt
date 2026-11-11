@@ -4,44 +4,59 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.*
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 
 import com.syncowatch.app.ui.theme.SyncoWatchTheme
 import com.syncowatch.app.ui.welcome.EcraBoasVindas
 import com.syncowatch.app.ui.login.EcraLogin
+import com.syncowatch.app.ui.patient.PatientDashboard
+import com.syncowatch.app.ui.patient.PatientNavigation
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
 
         setContent {
+
             SyncoWatchTheme {
 
-                // Controla qual dos ecrãs é apresentado
-                var mostrarLogin by rememberSaveable {
-                    mutableStateOf(false)
+                // Guarda o ecrã atualmente apresentado
+                var ecraAtual by rememberSaveable {
+                    mutableStateOf("boas_vindas")
                 }
 
-                if (mostrarLogin) {
+                // Navegação entre os ecrãs
+                when (ecraAtual) {
 
-                    // Apresenta o ecrã de login
-                    EcraLogin(
-                        onVoltar = {
-                            mostrarLogin = false
-                        }
-                    )
+                    "boas_vindas" -> {
+                        EcraBoasVindas(
+                            onIniciarSessao = {
+                                ecraAtual = "login"
+                            }
+                        )
+                    }
 
-                } else {
+                    "login" -> {
+                        EcraLogin(
+                            onVoltar = {
+                                ecraAtual = "boas_vindas"
+                            },
+                            onEntrar = {
+                                ecraAtual = "dashboard"
+                            }
+                        )
+                    }
 
-                    // Apresenta o ecrã de boas-vindas
-                    EcraBoasVindas(
-                        onIniciarSessao = {
-                            mostrarLogin = true
-                        }
-                    )
+                    "dashboard" -> {
+                        PatientNavigation()
+                    }
                 }
             }
         }
