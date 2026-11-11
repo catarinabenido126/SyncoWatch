@@ -26,9 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.syncowatch.app.ui.theme.SyncoWatchTheme
-
-private val AzulPetroleo = Color(0xFF104D58)
-private val AzulClaro = Color(0xFFEAF8F9)
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+private val AzulPetroleo = Color(0xFF285B6D)
+private val AzulClaro = Color(0xFFDCEFF1)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +54,15 @@ fun EcraBoasVindas() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logótipo SyncoWatch",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "SyncoWatch",
             color = AzulPetroleo,
