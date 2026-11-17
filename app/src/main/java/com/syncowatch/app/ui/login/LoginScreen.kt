@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,24 +30,31 @@ import com.syncowatch.app.ui.SyncoWatchColors
 import com.syncowatch.app.ui.theme.SyncoWatchTheme
 
 
+// =====================================================
 // CORES DA APLICAÇÃO
+// =====================================================
 
 private val AzulPetroleo = SyncoWatchColors.AzulPetroleo
 private val AzulClaro = SyncoWatchColors.AzulClaro
 private val TextoSecundario = SyncoWatchColors.TextoSecundario
 
 
+// =====================================================
 // ECRÃ DE LOGIN
+// =====================================================
 
 @Composable
 fun EcraLogin(
     onVoltar: () -> Unit,
-    onEntrar: () -> Unit
+    onEntrar: (String, String) -> Unit,
+    onAjuda: () -> Unit,
+    mensagemErro: String? = null,
+    emCarregamento: Boolean = false
 ) {
 
     // ESTADO DOS CAMPOS
 
-    var email by rememberSaveable {
+    var nomeUtilizador by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -54,6 +62,16 @@ fun EcraLogin(
         mutableStateOf("")
     }
 
+    var mostrarPalavraPasse by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var mostrarErros by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val utilizadorValido = nomeUtilizador.isNotBlank()
+    val passwordValida = palavraPasse.isNotBlank()
 
     // INTERFACE PRINCIPAL
 
@@ -83,10 +101,7 @@ fun EcraLogin(
                 .height(145.dp)
         )
 
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
-
+        Spacer(Modifier.height(20.dp))
 
         // TÍTULO
 
@@ -97,9 +112,7 @@ fun EcraLogin(
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
+        Spacer(Modifier.height(8.dp))
 
         Text(
             text = "Aceda à sua área pessoal",
@@ -107,27 +120,29 @@ fun EcraLogin(
             fontSize = 14.sp
         )
 
-        Spacer(
-            modifier = Modifier.height(35.dp)
-        )
+        Spacer(Modifier.height(35.dp))
 
-
-        // CAMPO EMAIL
+        // =================================================
+        // NOME DE UTILIZADOR
+        // =================================================
 
         OutlinedTextField(
-            value = email,
+            value = nomeUtilizador,
             onValueChange = {
-                email = it
+                nomeUtilizador = it
+                mostrarErros = false
             },
             label = {
-                Text("Email")
+                Text("Nome de utilizador")
             },
             placeholder = {
-                Text("Introduza o seu email")
+                Text("Introduza o seu utilizador")
             },
             singleLine = true,
+            enabled = !emCarregamento,
+            isError = mostrarErros && !utilizadorValido,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Text
             ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth(),
@@ -140,17 +155,28 @@ fun EcraLogin(
             )
         )
 
-        Spacer(
-            modifier = Modifier.height(17.dp)
-        )
+        if (mostrarErros && !utilizadorValido) {
+            Text(
+                text = "Introduza o nome de utilizador.",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp)
+            )
+        }
 
+        Spacer(Modifier.height(17.dp))
 
-        // CAMPO PALAVRA-PASSE
+        // =================================================
+        // PALAVRA-PASSE
+        // =================================================
 
         OutlinedTextField(
             value = palavraPasse,
             onValueChange = {
                 palavraPasse = it
+                mostrarErros = false
             },
             label = {
                 Text("Palavra-passe")
@@ -159,10 +185,29 @@ fun EcraLogin(
                 Text("Introduza a sua palavra-passe")
             },
             singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
+            enabled = !emCarregamento,
+            isError = mostrarErros && !passwordValida,
+            visualTransformation = if (mostrarPalavraPasse) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
+            trailingIcon = {
+                TextButton(
+                    onClick = {
+                        mostrarPalavraPasse = !mostrarPalavraPasse
+                    }
+                ) {
+                    Text(
+                        text = if (mostrarPalavraPasse) "Ocultar" else "Mostrar",
+                        color = AzulPetroleo,
+                        fontSize = 12.sp
+                    )
+                }
+            },
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
@@ -174,17 +219,77 @@ fun EcraLogin(
             )
         )
 
-        Spacer(
-            modifier = Modifier.height(30.dp)
-        )
+        if (mostrarErros && !passwordValida) {
+            Text(
+                text = "Introduza a palavra-passe.",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp)
+            )
+        }
 
+        // =================================================
+        // AJUDA PARA ENTRAR
+        // =================================================
 
+        Spacer(Modifier.height(8.dp))
+
+        TextButton(
+            onClick = onAjuda,
+            enabled = !emCarregamento,
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text(
+                text = "Precisa de ajuda para entrar?",
+                fontSize = 12.sp,
+                color = AzulPetroleo
+            )
+        }
+
+        // =================================================
+        // ERRO DE AUTENTICAÇÃO
+        // =================================================
+
+        if (!mensagemErro.isNullOrBlank()) {
+
+            Spacer(Modifier.height(10.dp))
+
+            Surface(
+                color = MaterialTheme.colorScheme.errorContainer,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = mensagemErro,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    fontSize = 13.sp,
+                    lineHeight = 19.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp)
+                )
+            }
+        }
+
+        Spacer(Modifier.height(22.dp))
+
+        // =================================================
         // BOTÃO ENTRAR
+        // =================================================
 
         Button(
-            onClick = onEntrar,
-            enabled = email.isNotBlank() &&
-                    palavraPasse.isNotBlank(),
+            onClick = {
+                mostrarErros = true
+
+                if (utilizadorValido && passwordValida) {
+                    onEntrar(
+                        nomeUtilizador.trim(),
+                        palavraPasse
+                    )
+                }
+            },
+            enabled = !emCarregamento,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
@@ -197,37 +302,42 @@ fun EcraLogin(
             )
         ) {
 
-            Text(
-                text = "Entrar",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (emCarregamento) {
+
+                CircularProgressIndicator(
+                    modifier = Modifier.size(22.dp),
+                    color = Color.White,
+                    strokeWidth = 2.dp
+                )
+
+            } else {
+
+                Text(
+                    text = "Entrar",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
 
-        Spacer(
-            modifier = Modifier.height(15.dp)
-        )
-
-
-        // MODO DE DEMONSTRAÇÃO
+        Spacer(Modifier.height(18.dp))
 
         Text(
-            text = "Modo de demonstração",
+            text = "Autenticação através do servidor SyncoWatch",
             fontSize = 12.sp,
             color = TextoSecundario
         )
 
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
+        Spacer(Modifier.height(20.dp))
 
-
-        // BOTÃO VOLTAR
+        // =================================================
+        // VOLTAR
+        // =================================================
 
         TextButton(
-            onClick = onVoltar
+            onClick = onVoltar,
+            enabled = !emCarregamento
         ) {
-
             Text(
                 text = "Voltar",
                 color = AzulPetroleo,
@@ -239,7 +349,9 @@ fun EcraLogin(
 }
 
 
-// PREVIEW DO LOGIN
+// =====================================================
+// PREVIEW
+// =====================================================
 
 @Preview(
     showBackground = true,
@@ -249,10 +361,10 @@ fun EcraLogin(
 fun EcraLoginPreview() {
 
     SyncoWatchTheme {
-
         EcraLogin(
             onVoltar = {},
-            onEntrar = {}
+            onEntrar = { _, _ -> },
+            onAjuda = {}
         )
     }
 }

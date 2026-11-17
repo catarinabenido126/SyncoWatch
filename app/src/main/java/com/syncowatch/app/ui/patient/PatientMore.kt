@@ -88,6 +88,16 @@ fun PatientMore(
             )
         }
 
+        // OS MEUS CUIDADORES
+
+        "Os meus cuidadores" -> {
+            PatientCaregivers(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+
         // RESTANTES PÁGINAS EM DESENVOLVIMENTO
 
         else -> {
@@ -224,6 +234,21 @@ private fun PatientMoreHome(
         // =================================================
 
         MoreSectionTitle("Segurança")
+
+        // NOVO — OS MEUS CUIDADORES
+
+        MoreOptionCard(
+            icon = "♧",
+            title = "Os meus cuidadores",
+            description = "Consulte os cuidadores associados e envie convites.",
+            onClick = {
+                onAbrir("Os meus cuidadores")
+            }
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        // CONTACTO DE EMERGÊNCIA
 
         MoreOptionCard(
             icon = "✚",
