@@ -97,7 +97,7 @@ fun PatientNavigation() {
 
                 3 -> PatientDoctor()
 
-                4 -> PaginaProvisoria("Mais")
+                4 -> PatientMore()
             }
         }
     }
