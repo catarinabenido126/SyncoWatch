@@ -37,6 +37,8 @@ fun PatientMore(
 
     when (ecraAtual) {
 
+        // PÁGINA PRINCIPAL
+
         "principal" -> {
             PatientMoreHome(
                 onAbrir = { destino ->
@@ -46,6 +48,8 @@ fun PatientMore(
             )
         }
 
+        // DIÁRIO DE SINTOMAS
+
         "Diário de sintomas" -> {
             PatientSymptomDiary(
                 onVoltar = {
@@ -53,6 +57,38 @@ fun PatientMore(
                 }
             )
         }
+
+        // OS MEUS DISPOSITIVOS
+
+        "Os meus dispositivos" -> {
+            PatientDevices(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+
+        // O MEU PERFIL
+
+        "O meu perfil" -> {
+            PatientProfile(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+
+        // CONTACTOS DE EMERGÊNCIA
+
+        "Contactos de emergência" -> {
+            PatientEmergencyContact(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+
+        // RESTANTES PÁGINAS EM DESENVOLVIMENTO
 
         else -> {
             PatientMorePlaceholder(
@@ -192,7 +228,7 @@ private fun PatientMoreHome(
         MoreOptionCard(
             icon = "✚",
             title = "Contactos de emergência",
-            description = "Consulte os contactos associados à sua conta.",
+            description = "Consulte o contacto de emergência associado à sua conta.",
             onClick = {
                 onAbrir("Contactos de emergência")
             }
