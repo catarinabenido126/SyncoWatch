@@ -13,7 +13,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.syncowatch.app.ui.theme.SyncoWatchTheme
 import com.syncowatch.app.ui.welcome.EcraBoasVindas
 import com.syncowatch.app.ui.login.EcraLogin
-import com.syncowatch.app.ui.patient.PatientDashboard
 import com.syncowatch.app.ui.patient.PatientNavigation
 
 class MainActivity : ComponentActivity() {
