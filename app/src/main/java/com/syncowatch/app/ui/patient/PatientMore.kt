@@ -97,6 +97,22 @@ fun PatientMore(
                 }
             )
         }
+        "Guia de utilização" -> {
+            PatientDeviceGuide(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+        // RELATÓRIOS
+
+        "Relatórios" -> {
+            PatientReports(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
 
         // RESTANTES PÁGINAS EM DESENVOLVIMENTO
 
