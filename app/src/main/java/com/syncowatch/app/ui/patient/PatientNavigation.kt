@@ -12,8 +12,11 @@ import androidx.compose.ui.unit.sp
 
 import com.syncowatch.app.ui.SyncoWatchColors
 
+
 @Composable
-fun PatientNavigation() {
+fun PatientNavigation(
+    onTerminarSessao: () -> Unit
+) {
 
     var separadorAtual by rememberSaveable {
         mutableStateOf(0)
@@ -97,11 +100,14 @@ fun PatientNavigation() {
 
                 3 -> PatientDoctor()
 
-                4 -> PatientMore()
+                4 -> PatientMore(
+                    onTerminarSessao = onTerminarSessao
+                )
             }
         }
     }
 }
+
 
 @Composable
 private fun PaginaProvisoria(titulo: String) {

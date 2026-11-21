@@ -113,6 +113,13 @@ fun PatientMore(
                 }
             )
         }
+        "Definições" -> {
+            PatientSettings(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
 
         // RESTANTES PÁGINAS EM DESENVOLVIMENTO
 
