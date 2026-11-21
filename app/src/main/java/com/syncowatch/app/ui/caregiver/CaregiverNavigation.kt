@@ -96,97 +96,13 @@ fun CaregiverNavigation(
 
                 0 -> CaregiverAlerts()
 
-                // PÁGINAS VAZIAS — A DESENVOLVER POSTERIORMENTE
-                1 -> Box(modifier = Modifier.fillMaxSize())
+                1 -> CaregiverPatients()
 
                 2 -> CaregiverMore(
                     onTerminarSessao = onTerminarSessao
                 )
             }
         }
-    }
-}
-
-
-// =====================================================
-// PÁGINA INICIAL — ALERTAS
-// =====================================================
-
-@Composable
-private fun CaregiverAlerts() {
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SyncoWatchColors.Fundo)
-            .padding(horizontal = 20.dp)
-    ) {
-
-        Spacer(Modifier.height(35.dp))
-
-        Text(
-            text = "Alertas",
-            fontSize = 29.sp,
-            fontWeight = FontWeight.Bold,
-            color = SyncoWatchColors.AzulPetroleo
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        Text(
-            text = "Acompanhe os alertas dos pacientes associados.",
-            fontSize = 14.sp,
-            color = SyncoWatchColors.TextoSecundario
-        )
-
-        Spacer(Modifier.height(30.dp))
-
-        // ESTADO ATUAL
-
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(18.dp),
-            color = SyncoWatchColors.Branco,
-            shadowElevation = 2.dp
-        ) {
-
-            Column(
-                modifier = Modifier.padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Text(
-                    text = "Sem alertas para apresentar",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = SyncoWatchColors.AzulPetroleo
-                )
-
-                Spacer(Modifier.height(9.dp))
-
-                Text(
-                    text = "Os alertas recebidos serão apresentados aqui.",
-                    fontSize = 13.sp,
-                    lineHeight = 20.sp,
-                    color = SyncoWatchColors.TextoSecundario
-                )
-            }
-        }
-
-        Spacer(Modifier.height(28.dp))
-
-        Text(
-            text = "Histórico de alertas",
-            fontSize = 19.sp,
-            fontWeight = FontWeight.Bold,
-            color = SyncoWatchColors.AzulPetroleo
-        )
-
-        Spacer(Modifier.height(14.dp))
-
-        HorizontalDivider(
-            color = SyncoWatchColors.AzulClaro
-        )
     }
 }
 
