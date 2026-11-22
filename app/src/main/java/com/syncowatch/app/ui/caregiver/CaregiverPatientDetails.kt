@@ -195,6 +195,15 @@ fun CaregiverPatientDetails(
                 }
             )
         }
+        "informacoes" -> {
+
+            CaregiverPatientInfo(
+                paciente = paciente,
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
 
         else -> {
 

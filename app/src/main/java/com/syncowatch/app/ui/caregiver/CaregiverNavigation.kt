@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -116,6 +115,148 @@ private fun CaregiverMore(
     onTerminarSessao: () -> Unit
 ) {
 
+    var ecraAtual by rememberSaveable {
+        mutableStateOf("principal")
+    }
+
+    when (ecraAtual) {
+
+        "principal" -> {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(SyncoWatchColors.Fundo)
+                    .padding(horizontal = 20.dp)
+            ) {
+
+                Spacer(Modifier.height(30.dp))
+
+                Text(
+                    text = "Mais",
+                    fontSize = 29.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SyncoWatchColors.AzulPetroleo
+                )
+
+                Spacer(Modifier.height(25.dp))
+
+                CaregiverMenuButton(
+                    texto = "O meu perfil",
+                    onClick = {
+                        ecraAtual = "perfil"
+                    }
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                CaregiverMenuButton(
+                    texto = "Alterar palavra-passe",
+                    onClick = {
+                        ecraAtual = "password"
+                    }
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                CaregiverMenuButton(
+                    texto = "Definições",
+                    onClick = {
+                        ecraAtual = "definicoes"
+                    }
+                )
+
+                Spacer(Modifier.height(30.dp))
+
+                OutlinedButton(
+                    onClick = onTerminarSessao,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = SyncoWatchColors.VermelhoSOS
+                    )
+                ) {
+
+                    Text(
+                        text = "Terminar sessão",
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+        }
+
+        "perfil" -> {
+
+            CaregiverProfile(
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+
+        "password" -> {
+
+            CaregiverSimplePage(
+                titulo = "Alterar palavra-passe",
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+
+        "definicoes" -> {
+
+            CaregiverSimplePage(
+                titulo = "Definições",
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+    }
+}
+
+
+// =====================================================
+// BOTÃO DO MENU MAIS
+// =====================================================
+
+@Composable
+private fun CaregiverMenuButton(
+    texto: String,
+    onClick: () -> Unit
+) {
+
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = SyncoWatchColors.Branco
+        )
+    ) {
+
+        Text(
+            text = "$texto  ›",
+            modifier = Modifier.padding(20.dp),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = SyncoWatchColors.AzulPetroleo
+        )
+    }
+}
+
+
+// =====================================================
+// PÁGINAS DO MENU MAIS
+// =====================================================
+
+@Composable
+private fun CaregiverSimplePage(
+    titulo: String,
+    onVoltar: () -> Unit
+) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -123,30 +264,25 @@ private fun CaregiverMore(
             .padding(horizontal = 20.dp)
     ) {
 
-        Spacer(Modifier.height(35.dp))
+        Spacer(Modifier.height(20.dp))
 
-        Text(
-            text = "Mais",
-            fontSize = 29.sp,
-            fontWeight = FontWeight.Bold,
-            color = SyncoWatchColors.AzulPetroleo
-        )
-
-        Spacer(Modifier.height(30.dp))
-
-        OutlinedButton(
-            onClick = onTerminarSessao,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = SyncoWatchColors.VermelhoSOS
-            )
+        TextButton(
+            onClick = onVoltar
         ) {
 
             Text(
-                text = "Terminar sessão",
-                fontWeight = FontWeight.SemiBold
+                text = "‹ Voltar",
+                color = SyncoWatchColors.AzulPetroleo
             )
         }
+
+        Spacer(Modifier.height(15.dp))
+
+        Text(
+            text = titulo,
+            fontSize = 27.sp,
+            fontWeight = FontWeight.Bold,
+            color = SyncoWatchColors.AzulPetroleo
+        )
     }
 }
