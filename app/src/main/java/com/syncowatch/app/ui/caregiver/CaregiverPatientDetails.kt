@@ -168,6 +168,33 @@ fun CaregiverPatientDetails(
                 }
             )
         }
+        "historico" -> {
+
+            CaregiverHistory(
+                paciente = paciente,
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+        "localizacao" -> {
+
+            CaregiverLocation(
+                paciente = paciente,
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
+        "sintomas" -> {
+
+            CaregiverSymptoms(
+                paciente = paciente,
+                onVoltar = {
+                    ecraAtual = "principal"
+                }
+            )
+        }
 
         else -> {
 
