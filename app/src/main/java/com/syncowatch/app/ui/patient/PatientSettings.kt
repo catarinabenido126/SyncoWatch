@@ -21,7 +21,8 @@ import com.syncowatch.app.ui.SyncoWatchColors
 
 @Composable
 fun PatientSettings(
-    onVoltar: () -> Unit
+    onVoltar: () -> Unit,
+    tipoUtilizador: String = "paciente"
 ) {
 
     Column(
@@ -110,23 +111,27 @@ fun PatientSettings(
         // =================================================
         // PRIVACIDADE
         // =================================================
-
         SettingsSectionTitle("Privacidade")
-
         SettingsInfoCard(
             titulo = "Proteção de dados",
-            descricao = "Os dados de saúde serão associados à conta do paciente e disponibilizados apenas aos utilizadores autorizados."
+            descricao = if (tipoUtilizador == "cuidador") {
+                "Os dados de saúde dos pacientes são disponibilizados apenas aos cuidadores autorizados."
+            } else {
+                "Os dados de saúde são associados à sua conta e disponibilizados apenas aos utilizadores autorizados."
+            }
         )
 
         Spacer(Modifier.height(12.dp))
 
         SettingsInfoCard(
             titulo = "Acesso à informação",
-            descricao = "O paciente poderá consultar as suas informações e os cuidadores terão acesso apenas aos dados permitidos."
+            descricao = if (tipoUtilizador == "cuidador") {
+                "O cuidador poderá consultar apenas as informações dos pacientes que autorizaram o seu acesso."
+            } else {
+                "O paciente poderá consultar as suas informações e os cuidadores terão acesso apenas aos dados permitidos."
+            }
         )
-
         Spacer(Modifier.height(26.dp))
-
         // =================================================
         // SOBRE A APLICAÇÃO
         // =================================================

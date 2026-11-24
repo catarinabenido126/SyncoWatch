@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.syncowatch.app.ui.login.ChangePasswordScreen
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -196,8 +197,9 @@ private fun CaregiverMore(
 
         "password" -> {
 
-            CaregiverSimplePage(
-                titulo = "Alterar palavra-passe",
+            ChangePasswordScreen(
+                primeiroAcesso = false,
+                onGuardar = {},
                 onVoltar = {
                     ecraAtual = "principal"
                 }

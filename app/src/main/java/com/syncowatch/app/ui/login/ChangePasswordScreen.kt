@@ -25,8 +25,15 @@ import com.syncowatch.app.ui.SyncoWatchColors
 fun ChangePasswordScreen(
     onGuardar: (String) -> Unit,
     emCarregamento: Boolean = false,
-    mensagemErro: String? = null
+    mensagemErro: String? = null,
+    primeiroAcesso: Boolean = true,
+    onVoltar: (() -> Unit)? = null,
+    onGuardarAlteracao: ((String, String) -> Unit)? = null
 ) {
+
+    var palavraPasseAtual by rememberSaveable {
+        mutableStateOf("")
+    }
 
     var novaPalavraPasse by rememberSaveable {
         mutableStateOf("")
@@ -49,8 +56,13 @@ fun ChangePasswordScreen(
     val passwordsIguais =
         novaPalavraPasse == confirmarPalavraPasse
 
+    val palavraPasseAtualValida =
+        primeiroAcesso || palavraPasseAtual.isNotBlank()
+
     val formularioValido =
-        tamanhoValido && passwordsIguais
+        tamanhoValido &&
+                passwordsIguais &&
+                palavraPasseAtualValida
 
     Column(
         modifier = Modifier
@@ -63,10 +75,27 @@ fun ChangePasswordScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        // CABEÇALHO
+        if (!primeiroAcesso && onVoltar != null) {
+
+            TextButton(
+                onClick = onVoltar,
+                modifier = Modifier.align(Alignment.Start)
+            ) {
+                Text(
+                    text = "‹ Voltar",
+                    color = SyncoWatchColors.AzulPetroleo
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+        }
 
         Text(
-            text = "Definir palavra-passe",
+            text = if (primeiroAcesso) {
+                "Definir palavra-passe"
+            } else {
+                "Alterar palavra-passe"
+            },
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = SyncoWatchColors.AzulPetroleo
@@ -75,13 +104,47 @@ fun ChangePasswordScreen(
         Spacer(Modifier.height(12.dp))
 
         Text(
-            text = "Por motivos de segurança, deve definir uma nova palavra-passe antes de continuar.",
+            text = if (primeiroAcesso) {
+                "Por motivos de segurança, deve definir uma nova palavra-passe antes de continuar."
+            } else {
+                "Introduza a palavra-passe atual e escolha uma nova palavra-passe."
+            },
             fontSize = 14.sp,
             lineHeight = 21.sp,
             color = SyncoWatchColors.TextoSecundario
         )
 
         Spacer(Modifier.height(30.dp))
+
+        // PALAVRA-PASSE ATUAL
+
+        if (!primeiroAcesso) {
+
+            OutlinedTextField(
+                value = palavraPasseAtual,
+                onValueChange = {
+                    palavraPasseAtual = it
+                    mostrarErros = false
+                },
+                label = {
+                    Text("Palavra-passe atual")
+                },
+                singleLine = true,
+                enabled = !emCarregamento,
+                visualTransformation = if (mostrarPassword) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(16.dp))
+        }
 
         // NOVA PALAVRA-PASSE
 
@@ -137,15 +200,12 @@ fun ChangePasswordScreen(
 
         Spacer(Modifier.height(8.dp))
 
-        // MOSTRAR / OCULTAR
-
         TextButton(
             onClick = {
                 mostrarPassword = !mostrarPassword
             },
             modifier = Modifier.align(Alignment.End)
         ) {
-
             Text(
                 text = if (mostrarPassword) {
                     "Ocultar palavras-passe"
@@ -160,17 +220,23 @@ fun ChangePasswordScreen(
 
         if (mostrarErros) {
 
-            if (!tamanhoValido) {
-
+            if (!palavraPasseAtualValida) {
                 Text(
-                    text = "A palavra-passe deve ter pelo menos 8 caracteres.",
+                    text = "Introduza a palavra-passe atual.",
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 12.sp
+                )
+            }
+
+            if (!tamanhoValido) {
+                Text(
+                    text = "A nova palavra-passe deve ter pelo menos 8 caracteres.",
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 12.sp
                 )
             }
 
             if (tamanhoValido && !passwordsIguais) {
-
                 Text(
                     text = "As palavras-passe não coincidem.",
                     color = MaterialTheme.colorScheme.error,
@@ -192,17 +258,25 @@ fun ChangePasswordScreen(
 
         Spacer(Modifier.height(25.dp))
 
-        // GUARDAR
-
         Button(
             onClick = {
+
                 mostrarErros = true
 
                 if (formularioValido) {
-                    onGuardar(novaPalavraPasse)
+
+                    if (primeiroAcesso) {
+                        onGuardar(novaPalavraPasse)
+                    } else {
+                        onGuardarAlteracao?.invoke(
+                            palavraPasseAtual,
+                            novaPalavraPasse
+                        )
+                    }
                 }
             },
-            enabled = !emCarregamento,
+            enabled = !emCarregamento &&
+                    (primeiroAcesso || onGuardarAlteracao != null),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
