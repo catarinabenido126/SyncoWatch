@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 
 import com.syncowatch.app.ui.SyncoWatchColors
 
+
 @Composable
 fun PatientDevices(
     onVoltar: () -> Unit
@@ -55,9 +56,8 @@ fun PatientDevices(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = "Consulte os dispositivos utilizados na monitorização.",
+            text = "Gira a ligação dos seus dispositivos.",
             fontSize = 14.sp,
-            lineHeight = 20.sp,
             color = SyncoWatchColors.TextoSecundario
         )
 
@@ -68,53 +68,18 @@ fun PatientDevices(
         DeviceCard(
             icon = "⌚",
             nome = "Relógio SyncoWatch",
-            descricao = "Monitorização da frequência cardíaca, SpO₂ e variabilidade cardíaca.",
-            estado = "Não ligado",
-            mostrarBotao = true
+            estado = "Desligado"
         )
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(16.dp))
 
         // MÓDULO DORSAL
 
         DeviceCard(
-            icon = "📡",
+            icon = "◈",
             nome = "Módulo dorsal",
-            descricao = "Monitorização da postura e dos movimentos corporais.",
-            estado = "Estado indisponível",
-            mostrarBotao = false
+            estado = "Desligado"
         )
-
-        Spacer(Modifier.height(25.dp))
-
-        // INFORMAÇÃO
-
-        Surface(
-            color = SyncoWatchColors.AzulClaro,
-            shape = RoundedCornerShape(16.dp)
-        ) {
-
-            Column(
-                modifier = Modifier.padding(18.dp)
-            ) {
-
-                Text(
-                    text = "ℹ Como funciona a ligação?",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = SyncoWatchColors.AzulPetroleo
-                )
-
-                Spacer(Modifier.height(10.dp))
-
-                Text(
-                    text = "O módulo dorsal comunica diretamente com o relógio através de Bluetooth. O relógio envia os dados de monitorização para a aplicação.",
-                    fontSize = 13.sp,
-                    lineHeight = 20.sp,
-                    color = SyncoWatchColors.TextoPrincipal
-                )
-            }
-        }
 
         Spacer(Modifier.height(30.dp))
     }
@@ -129,9 +94,7 @@ fun PatientDevices(
 private fun DeviceCard(
     icon: String,
     nome: String,
-    descricao: String,
-    estado: String,
-    mostrarBotao: Boolean
+    estado: String
 ) {
 
     Card(
@@ -165,14 +128,17 @@ private fun DeviceCard(
 
                         Text(
                             text = icon,
-                            fontSize = 25.sp
+                            fontSize = 25.sp,
+                            color = SyncoWatchColors.Turquesa
                         )
                     }
                 }
 
                 Spacer(Modifier.width(14.dp))
 
-                Column {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
 
                     Text(
                         text = nome,
@@ -181,50 +147,35 @@ private fun DeviceCard(
                         color = SyncoWatchColors.TextoPrincipal
                     )
 
-                    Spacer(Modifier.height(5.dp))
+                    Spacer(Modifier.height(6.dp))
 
                     Text(
                         text = estado,
                         fontSize = 13.sp,
-                        color = SyncoWatchColors.TextoSecundario
+                        color = SyncoWatchColors.VermelhoSOS
                     )
                 }
             }
 
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(20.dp))
 
-            Text(
-                text = descricao,
-                fontSize = 13.sp,
-                lineHeight = 19.sp,
-                color = SyncoWatchColors.TextoSecundario
-            )
+            // BOTÃO DE LIGAÇÃO
 
-            if (mostrarBotao) {
-
-                Spacer(Modifier.height(20.dp))
-
-                Button(
-                    onClick = {
-                        // Ligação BLE será implementada posteriormente.
-                    },
-                    enabled = false,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = SyncoWatchColors.AzulPetroleo
-                    )
-                ) {
-
-                    Text("Ligar dispositivo")
-                }
-
-                Spacer(Modifier.height(6.dp))
+            Button(
+                onClick = {
+                    // Ligação BLE a implementar.
+                },
+                enabled = false,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = SyncoWatchColors.AzulPetroleo
+                )
+            ) {
 
                 Text(
-                    text = "Ligação Bluetooth em desenvolvimento.",
-                    fontSize = 11.sp,
-                    color = SyncoWatchColors.TextoSecundario
+                    text = "Ligar dispositivo",
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }

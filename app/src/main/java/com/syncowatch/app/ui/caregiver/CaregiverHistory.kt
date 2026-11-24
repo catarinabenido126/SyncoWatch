@@ -7,12 +7,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.syncowatch.app.ui.SyncoWatchColors
+import com.syncowatch.app.ui.patient.HistoryChart
+
 
 // =====================================================
 // HISTÓRICO DO PACIENTE — ÁREA DO CUIDADOR
@@ -23,7 +26,8 @@ fun CaregiverHistory(
     paciente: CaregiverPatientSummary,
     onVoltar: () -> Unit
 ) {
-    var periodoSelecionado by remember {
+
+    var periodoSelecionado by rememberSaveable {
         mutableStateOf("24 horas")
     }
 
@@ -32,6 +36,16 @@ fun CaregiverHistory(
         "7 dias",
         "30 dias"
     )
+
+    // Futuramente, as medições serão obtidas da API Flask
+    // de acordo com o paciente e o período selecionados.
+
+    val medicoesFrequenciaCardiaca = emptyList<Float>()
+    val medicoesSpO2 = emptyList<Float>()
+    val medicoesRMSSD = emptyList<Float>()
+    val medicoesInclinacao = emptyList<Float>()
+
+    val etiquetasTemporais = emptyList<String>()
 
     Column(
         modifier = Modifier
@@ -43,7 +57,11 @@ fun CaregiverHistory(
 
         Spacer(Modifier.height(20.dp))
 
-        TextButton(onClick = onVoltar) {
+        // VOLTAR
+
+        TextButton(
+            onClick = onVoltar
+        ) {
             Text(
                 text = "‹ Voltar",
                 color = SyncoWatchColors.AzulPetroleo
@@ -51,6 +69,8 @@ fun CaregiverHistory(
         }
 
         Spacer(Modifier.height(15.dp))
+
+        // CABEÇALHO
 
         Text(
             text = "Histórico",
@@ -69,9 +89,7 @@ fun CaregiverHistory(
 
         Spacer(Modifier.height(28.dp))
 
-        // ============================================
         // SELEÇÃO DO PERÍODO
-        // ============================================
 
         Text(
             text = "Período de consulta",
@@ -86,6 +104,7 @@ fun CaregiverHistory(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+
             periodos.forEach { periodo ->
 
                 FilterChip(
@@ -98,57 +117,90 @@ fun CaregiverHistory(
                             text = periodo,
                             fontSize = 12.sp
                         )
-                    }
+                    },
+                    modifier = Modifier.weight(1f),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = SyncoWatchColors.AzulPetroleo,
+                        selectedLabelColor = SyncoWatchColors.Branco
+                    )
                 )
             }
         }
 
         Spacer(Modifier.height(30.dp))
 
-        // ============================================
         // PARÂMETROS FISIOLÓGICOS
-        // ============================================
 
         HistorySectionTitle("Parâmetros fisiológicos")
 
-        HistoryGraphCard(
+        CaregiverHistoryGraphCard(
             titulo = "Frequência cardíaca",
-            unidade = "bpm"
+            unidade = "bpm",
+            valores = medicoesFrequenciaCardiaca,
+            etiquetas = etiquetasTemporais
         )
 
         Spacer(Modifier.height(14.dp))
 
-        HistoryGraphCard(
+        CaregiverHistoryGraphCard(
             titulo = "SpO₂",
-            unidade = "%"
+            unidade = "%",
+            valores = medicoesSpO2,
+            etiquetas = etiquetasTemporais
         )
 
         Spacer(Modifier.height(14.dp))
 
-        HistoryGraphCard(
+        CaregiverHistoryGraphCard(
             titulo = "RMSSD",
-            unidade = "ms"
+            unidade = "ms",
+            valores = medicoesRMSSD,
+            etiquetas = etiquetasTemporais
         )
 
         Spacer(Modifier.height(30.dp))
 
-        // ============================================
         // PARÂMETROS POSTURAIS
-        // ============================================
 
         HistorySectionTitle("Parâmetros posturais")
 
-        HistoryGraphCard(
-            titulo = "Postura",
-            unidade = ""
-        )
-
-        Spacer(Modifier.height(14.dp))
-
-        HistoryGraphCard(
+        CaregiverHistoryGraphCard(
             titulo = "Inclinação do tronco",
-            unidade = "°"
+            unidade = "°",
+            valores = medicoesInclinacao,
+            etiquetas = etiquetasTemporais
         )
+
+        Spacer(Modifier.height(18.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = SyncoWatchColors.Branco
+            )
+        ) {
+
+            Column(
+                modifier = Modifier.padding(18.dp)
+            ) {
+
+                Text(
+                    text = "Postura",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SyncoWatchColors.AzulPetroleo
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                Text(
+                    text = "Sem dados disponíveis",
+                    fontSize = 13.sp,
+                    color = SyncoWatchColors.TextoSecundario
+                )
+            }
+        }
 
         Spacer(Modifier.height(30.dp))
     }
@@ -156,13 +208,14 @@ fun CaregiverHistory(
 
 
 // =====================================================
-// TÍTULO DA SECÇÃO
+// TÍTULOS
 // =====================================================
 
 @Composable
 private fun HistorySectionTitle(
     titulo: String
 ) {
+
     Text(
         text = titulo,
         fontSize = 19.sp,
@@ -175,14 +228,17 @@ private fun HistorySectionTitle(
 
 
 // =====================================================
-// CARTÃO DE GRÁFICO
+// CARTÃO COM GRÁFICO
 // =====================================================
 
 @Composable
-private fun HistoryGraphCard(
+private fun CaregiverHistoryGraphCard(
     titulo: String,
-    unidade: String
+    unidade: String,
+    valores: List<Float>,
+    etiquetas: List<String>
 ) {
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
@@ -207,32 +263,19 @@ private fun HistoryGraphCard(
 
             Spacer(Modifier.height(8.dp))
 
-            if (unidade.isNotEmpty()) {
-                Text(
-                    text = "Unidade: $unidade",
-                    fontSize = 12.sp,
-                    color = SyncoWatchColors.TextoSecundario
-                )
-            }
+            Text(
+                text = "Unidade: $unidade",
+                fontSize = 12.sp,
+                color = SyncoWatchColors.TextoSecundario
+            )
 
             Spacer(Modifier.height(18.dp))
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp)
-                    .background(
-                        color = SyncoWatchColors.Fundo,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = androidx.compose.ui.Alignment.Center
-            ) {
-                Text(
-                    text = "Sem dados disponíveis",
-                    fontSize = 13.sp,
-                    color = SyncoWatchColors.TextoSecundario
-                )
-            }
+            HistoryChart(
+                values = valores,
+                labels = etiquetas,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
