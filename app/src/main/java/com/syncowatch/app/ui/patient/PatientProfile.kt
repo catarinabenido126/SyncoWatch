@@ -46,6 +46,8 @@ fun PatientProfile(
 
         "alterar_password" -> {
             ChangePasswordScreen(
+                primeiroAcesso = false,
+                onGuardar = {},
                 onVoltar = {
                     ecraAtual = "perfil"
                 }

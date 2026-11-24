@@ -75,14 +75,18 @@ fun ChangePasswordScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        if (!primeiroAcesso && onVoltar != null) {
+        if (onVoltar != null) {
 
             TextButton(
                 onClick = onVoltar,
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 Text(
-                    text = "‹ Voltar",
+                    text = if (primeiroAcesso) {
+                        "‹ Voltar ao login"
+                    } else {
+                        "‹ Voltar"
+                    },
                     color = SyncoWatchColors.AzulPetroleo
                 )
             }

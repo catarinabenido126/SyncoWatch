@@ -34,7 +34,8 @@ private data class PatientAlert(
     val titulo: String,
     val descricao: String,
     val tipo: AlertType,
-    val estado: String
+    val estado: String,
+    val estadoEnvio: String? = null
 )
 
 
@@ -357,6 +358,26 @@ private fun AlertCard(
                 lineHeight = 20.sp,
                 color = SyncoWatchColors.TextoPrincipal
             )
+
+            // ESTADO DE COMUNICAÇÃO COM O SERVIDOR
+
+            if (alerta.estadoEnvio != null) {
+
+                Spacer(Modifier.height(12.dp))
+
+                HorizontalDivider(
+                    color = SyncoWatchColors.AzulClaro
+                )
+
+                Spacer(Modifier.height(10.dp))
+
+                Text(
+                    text = "Comunicação: ${alerta.estadoEnvio}",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = SyncoWatchColors.TextoSecundario
+                )
+            }
         }
     }
 }

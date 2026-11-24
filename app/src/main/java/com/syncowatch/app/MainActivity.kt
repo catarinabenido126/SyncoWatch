@@ -23,6 +23,7 @@ import com.syncowatch.app.ui.theme.SyncoWatchTheme
 import com.syncowatch.app.ui.welcome.EcraBoasVindas
 import com.syncowatch.app.ui.login.EcraLogin
 import com.syncowatch.app.ui.login.LoginHelpScreen
+import com.syncowatch.app.ui.login.ChangePasswordScreen
 import com.syncowatch.app.ui.patient.PatientNavigation
 import com.syncowatch.app.ui.caregiver.CaregiverNavigation
 
@@ -48,9 +49,7 @@ class MainActivity : ComponentActivity() {
 
                 when (ecraAtual) {
 
-                    // =============================================
                     // BOAS-VINDAS
-                    // =============================================
 
                     "boas_vindas" -> {
 
@@ -62,9 +61,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // =============================================
                     // LOGIN
-                    // =============================================
 
                     "login" -> {
 
@@ -77,8 +74,7 @@ class MainActivity : ComponentActivity() {
                             onEntrar = { _, _ ->
 
                                 // MODO DE DEMONSTRAÇÃO
-                                // As credenciais ainda não são validadas.
-                                // Não utilizar com dados reais.
+                                // Ainda não existe autenticação real.
 
                                 erroLogin = null
                                 ecraAtual = "selecionar_perfil"
@@ -92,9 +88,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // =============================================
                     // AJUDA PARA ENTRAR
-                    // =============================================
 
                     "ajuda_login" -> {
 
@@ -105,9 +99,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // =============================================
                     // SELEÇÃO DO PERFIL — DEMONSTRAÇÃO
-                    // =============================================
 
                     "selecionar_perfil" -> {
 
@@ -115,18 +107,46 @@ class MainActivity : ComponentActivity() {
                             onPaciente = {
                                 ecraAtual = "dashboard_paciente"
                             },
+
                             onCuidador = {
                                 ecraAtual = "dashboard_cuidador"
                             },
+
+                            onPrimeiroAcessoCuidador = {
+                                ecraAtual = "primeiro_acesso_cuidador"
+                            },
+
                             onVoltar = {
                                 ecraAtual = "login"
                             }
                         )
                     }
 
-                    // =============================================
+                    // PRIMEIRO ACESSO DO CUIDADOR
+
+                    "primeiro_acesso_cuidador" -> {
+
+                        ChangePasswordScreen(
+                            primeiroAcesso = true,
+
+                            onGuardar = { _ ->
+
+                                // APENAS DEMONSTRAÇÃO:
+                                // A palavra-passe não é guardada.
+                                // Na versão real, a API terá de
+                                // confirmar a alteração antes de entrar.
+
+                                ecraAtual = "dashboard_cuidador"
+                            },
+
+                            onVoltar = {
+                                erroLogin = null
+                                ecraAtual = "login"
+                            }
+                        )
+                    }
+
                     // ÁREA DO PACIENTE
-                    // =============================================
 
                     "dashboard_paciente" -> {
 
@@ -138,9 +158,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // =============================================
                     // ÁREA DO CUIDADOR
-                    // =============================================
 
                     "dashboard_cuidador" -> {
 
@@ -158,14 +176,13 @@ class MainActivity : ComponentActivity() {
 }
 
 
-// =====================================================
 // SELEÇÃO DO PERFIL — APENAS PARA DESENVOLVIMENTO
-// =====================================================
 
 @Composable
 private fun SelecaoPerfilDemo(
     onPaciente: () -> Unit,
     onCuidador: () -> Unit,
+    onPrimeiroAcessoCuidador: () -> Unit,
     onVoltar: () -> Unit
 ) {
 
@@ -225,14 +242,14 @@ private fun SelecaoPerfilDemo(
 
         Spacer(Modifier.height(16.dp))
 
-        // CUIDADOR
+        // CUIDADOR COM CONTA EXISTENTE
 
         Button(
             onClick = onCuidador,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
+            shape =  RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = SyncoWatchColors.Turquesa
             )
@@ -242,6 +259,25 @@ private fun SelecaoPerfilDemo(
                 text = "Entrar como cuidador",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
+            )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        // PRIMEIRO ACESSO DO CUIDADOR
+
+        OutlinedButton(
+            onClick = onPrimeiroAcessoCuidador,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+
+            Text(
+                text = "Testar primeiro acesso",
+                fontSize = 15.sp,
+                color = SyncoWatchColors.AzulPetroleo
             )
         }
 
