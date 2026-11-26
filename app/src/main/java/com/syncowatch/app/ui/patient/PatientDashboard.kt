@@ -23,11 +23,17 @@ import com.syncowatch.app.R
 import com.syncowatch.app.ui.SyncoWatchColors
 import com.syncowatch.app.ui.theme.SyncoWatchTheme
 
+
 private val AzulPetroleo = SyncoWatchColors.AzulPetroleo
 private val Turquesa = SyncoWatchColors.Turquesa
 private val AzulClaro = SyncoWatchColors.AzulClaro
 private val Fundo = SyncoWatchColors.Fundo
 private val TextoSecundario = SyncoWatchColors.TextoSecundario
+
+
+// =====================================================
+// DASHBOARD DO PACIENTE
+// =====================================================
 
 @Composable
 fun PatientDashboard() {
@@ -42,7 +48,9 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(45.dp))
 
+        // =================================================
         // CABEÇALHO
+        // =================================================
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -79,7 +87,9 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(25.dp))
 
+        // =================================================
         // ESTADO DA MONITORIZAÇÃO
+        // =================================================
 
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -162,11 +172,15 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(27.dp))
 
+        // =================================================
         // MEDIÇÕES
+        // =================================================
 
         SectionTitle("Medições")
 
         Spacer(modifier = Modifier.height(14.dp))
+
+        // FREQUÊNCIA CARDÍACA E SpO₂
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -192,6 +206,34 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
+        // RMSSD E QUALIDADE DO SINAL
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+
+            MeasurementCard(
+                icon = "≈",
+                title = "Variabilidade cardíaca (RMSSD)",
+                value = "--",
+                unit = "ms",
+                modifier = Modifier.weight(1f)
+            )
+
+            MeasurementCard(
+                icon = "≋",
+                title = "Qualidade do sinal",
+                value = "--",
+                unit = "%",
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // POSTURA E MOVIMENTO
+
         MeasurementCard(
             icon = "↗",
             title = "Postura e movimento",
@@ -202,7 +244,9 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(27.dp))
 
+        // =================================================
         // DISPOSITIVOS
+        // =================================================
 
         SectionTitle("Dispositivos")
 
@@ -224,7 +268,9 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(27.dp))
 
-        // ALERTAS
+        // =================================================
+        // ALERTAS RECENTES
+        // =================================================
 
         SectionTitle("Alertas recentes")
 
@@ -262,7 +308,9 @@ fun PatientDashboard() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // INDICAÇÃO DE DEMONSTRAÇÃO
+        // =================================================
+        // MODO DE DEMONSTRAÇÃO
+        // =================================================
 
         Text(
             text = "Modo de demonstração · Sem dados reais",
@@ -276,10 +324,14 @@ fun PatientDashboard() {
 }
 
 
+// =====================================================
 // TÍTULOS DAS SECÇÕES
+// =====================================================
 
 @Composable
-private fun SectionTitle(title: String) {
+private fun SectionTitle(
+    title: String
+) {
 
     Text(
         text = title,
@@ -290,7 +342,9 @@ private fun SectionTitle(title: String) {
 }
 
 
+// =====================================================
 // CARTÕES DE MEDIÇÃO
+// =====================================================
 
 @Composable
 private fun MeasurementCard(
@@ -377,7 +431,9 @@ private fun MeasurementCard(
 }
 
 
+// =====================================================
 // CARTÕES DOS DISPOSITIVOS
+// =====================================================
 
 @Composable
 private fun DeviceCard(
@@ -454,7 +510,9 @@ private fun DeviceCard(
 }
 
 
+// =====================================================
 // PREVIEW
+// =====================================================
 
 @Preview(showBackground = true)
 @Composable

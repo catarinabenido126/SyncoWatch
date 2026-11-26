@@ -58,7 +58,7 @@ fun PatientMore(
             )
         }
 
-        // OS MEUS DISPOSITIVOS
+        // DISPOSITIVOS
 
         "Os meus dispositivos" -> {
             PatientDevices(
@@ -68,7 +68,7 @@ fun PatientMore(
             )
         }
 
-        // O MEU PERFIL
+        // PERFIL
 
         "O meu perfil" -> {
             PatientProfile(
@@ -78,17 +78,17 @@ fun PatientMore(
             )
         }
 
-        // CONTACTOS DE EMERGÊNCIA
+        // LOCALIZAÇÃO
 
-        "Contactos de emergência" -> {
-            PatientEmergencyContact(
+        "A minha localização" -> {
+            PatientLocation(
                 onVoltar = {
                     ecraAtual = "principal"
                 }
             )
         }
 
-        // OS MEUS CUIDADORES
+        // CUIDADORES
 
         "Os meus cuidadores" -> {
             PatientCaregivers(
@@ -97,6 +97,9 @@ fun PatientMore(
                 }
             )
         }
+
+        // GUIA DE UTILIZAÇÃO
+
         "Guia de utilização" -> {
             PatientDeviceGuide(
                 onVoltar = {
@@ -104,6 +107,7 @@ fun PatientMore(
                 }
             )
         }
+
         // RELATÓRIOS
 
         "Relatórios" -> {
@@ -113,6 +117,9 @@ fun PatientMore(
                 }
             )
         }
+
+        // DEFINIÇÕES
+
         "Definições" -> {
             PatientSettings(
                 onVoltar = {
@@ -121,7 +128,7 @@ fun PatientMore(
             )
         }
 
-        // RESTANTES PÁGINAS EM DESENVOLVIMENTO
+        // PÁGINAS EM DESENVOLVIMENTO
 
         else -> {
             PatientMorePlaceholder(
@@ -175,7 +182,6 @@ private fun PatientMoreHome(
 
         Spacer(Modifier.height(28.dp))
 
-
         // =================================================
         // CONTA
         // =================================================
@@ -192,7 +198,6 @@ private fun PatientMoreHome(
         )
 
         Spacer(Modifier.height(24.dp))
-
 
         // =================================================
         // DISPOSITIVOS
@@ -222,7 +227,6 @@ private fun PatientMoreHome(
 
         Spacer(Modifier.height(24.dp))
 
-
         // =================================================
         // SAÚDE
         // =================================================
@@ -251,14 +255,11 @@ private fun PatientMoreHome(
 
         Spacer(Modifier.height(24.dp))
 
-
         // =================================================
         // SEGURANÇA
         // =================================================
 
         MoreSectionTitle("Segurança")
-
-        // NOVO — OS MEUS CUIDADORES
 
         MoreOptionCard(
             icon = "♧",
@@ -271,19 +272,16 @@ private fun PatientMoreHome(
 
         Spacer(Modifier.height(12.dp))
 
-        // CONTACTO DE EMERGÊNCIA
-
         MoreOptionCard(
-            icon = "✚",
-            title = "Contactos de emergência",
-            description = "Consulte o contacto de emergência associado à sua conta.",
+            icon = "⌖",
+            title = "A minha localização",
+            description = "Consulte a sua localização e controle a partilha com os cuidadores.",
             onClick = {
-                onAbrir("Contactos de emergência")
+                onAbrir("A minha localização")
             }
         )
 
         Spacer(Modifier.height(24.dp))
-
 
         // =================================================
         // APLICAÇÃO
@@ -301,7 +299,6 @@ private fun PatientMoreHome(
         )
 
         Spacer(Modifier.height(20.dp))
-
 
         // =================================================
         // TERMINAR SESSÃO

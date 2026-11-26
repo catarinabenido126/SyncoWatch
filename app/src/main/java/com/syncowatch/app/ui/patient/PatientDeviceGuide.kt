@@ -30,6 +30,8 @@ fun PatientDeviceGuide(
 
         Spacer(Modifier.height(20.dp))
 
+        // VOLTAR
+
         TextButton(
             onClick = onVoltar
         ) {
@@ -41,6 +43,8 @@ fun PatientDeviceGuide(
 
         Spacer(Modifier.height(15.dp))
 
+        // CABEÇALHO
+
         Text(
             text = "Guia de utilização",
             fontSize = 27.sp,
@@ -51,62 +55,64 @@ fun PatientDeviceGuide(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = "Conheça os dispositivos e o funcionamento do sistema SyncoWatch.",
+            text = "Siga estes passos para utilizar o SyncoWatch.",
             fontSize = 14.sp,
-            lineHeight = 20.sp,
             color = SyncoWatchColors.TextoSecundario
         )
 
         Spacer(Modifier.height(28.dp))
 
-        // RELÓGIO
+        // PASSO 1 — RELÓGIO
 
-        GuideSectionTitle("⌚ Relógio SyncoWatch")
-
-        GuideCard(
-            texto = "Utilize o relógio no pulso, garantindo que fica corretamente ajustado para permitir a recolha dos sinais fisiológicos.\n\n" +
-                    "O relógio monitoriza a frequência cardíaca, a saturação de oxigénio e a variabilidade cardíaca.\n\n" +
-                    "Para transmitir os dados à aplicação, é necessário estabelecer uma ligação Bluetooth."
+        GuideStepCard(
+            numero = "1",
+            titulo = "Coloque o relógio",
+            texto = "Coloque o relógio no pulso, de forma confortável e bem ajustada. Evite que fique demasiado largo."
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(14.dp))
 
-        // MÓDULO DORSAL
+        // PASSO 2 — MÓDULO DORSAL
 
-        GuideSectionTitle("📡 Módulo dorsal")
-
-        GuideCard(
-            texto = "O módulo dorsal é utilizado para monitorizar a postura e os movimentos corporais.\n\n" +
-                    "Deverá ser colocado na região dorsal, de acordo com as instruções de montagem fornecidas pela equipa.\n\n" +
-                    "O módulo comunica diretamente com o relógio através de Bluetooth."
+        GuideStepCard(
+            numero = "2",
+            titulo = "Coloque o módulo dorsal",
+            texto = "Posicione o módulo nas costas, de acordo com as instruções fornecidas pela equipa responsável."
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(14.dp))
 
-        // MONITORIZAÇÃO
+        // PASSO 3 — LIGAÇÃO
 
-        GuideSectionTitle("📊 Monitorização")
-
-        GuideCard(
-            texto = "Após estabelecer a ligação ao relógio, a aplicação recebe periodicamente os dados de monitorização.\n\n" +
-                    "Os principais indicadores podem ser consultados no dashboard e no histórico de medições.\n\n" +
-                    "A qualidade do sinal influencia a fiabilidade das medições apresentadas."
+        GuideStepCard(
+            numero = "3",
+            titulo = "Ligue os dispositivos",
+            texto = "Ative os dois dispositivos e, na aplicação, aceda a Mais > Os meus dispositivos para estabelecer as ligações Bluetooth."
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(14.dp))
 
-        // ALERTAS
+        // PASSO 4 — MONITORIZAÇÃO
 
-        GuideSectionTitle("⚠ Alertas e SOS")
-
-        GuideCard(
-            texto = "O relógio é responsável pela deteção de alterações fisiológicas e pela determinação do nível de alerta.\n\n" +
-                    "Quando ocorre um evento relevante, a informação é transmitida à aplicação e encaminhada para o servidor.\n\n" +
-                    "Em situações de emergência, o sistema poderá notificar os cuidadores associados.\n\n" +
-                    "O botão SOS permite sinalizar manualmente uma situação de emergência, de acordo com o funcionamento definido para o relógio."
+        GuideStepCard(
+            numero = "4",
+            titulo = "Acompanhe a monitorização",
+            texto = "Consulte as medições na página Início. Para visualizar a evolução dos valores, aceda ao Histórico."
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(14.dp))
+
+        // PASSO 5 — ALERTAS
+
+        GuideStepCard(
+            numero = "5",
+            titulo = "Alertas e SOS",
+            texto = "Se receber um alerta, siga as indicações apresentadas no relógio. Em caso de necessidade, utilize o botão SOS do relógio para pedir ajuda."
+        )
+
+        Spacer(Modifier.height(28.dp))
+
+        // NOTA DE SEGURANÇA
 
         Surface(
             color = SyncoWatchColors.AzulClaro,
@@ -114,7 +120,7 @@ fun PatientDeviceGuide(
         ) {
 
             Text(
-                text = "Este guia será atualizado após a validação final dos dispositivos e dos procedimentos de utilização. O SyncoWatch não substitui a assistência médica ou os serviços de emergência.",
+                text = "O SyncoWatch é um sistema de monitorização e alerta. Não substitui a assistência médica nem os serviços de emergência.",
                 modifier = Modifier.padding(16.dp),
                 fontSize = 12.sp,
                 lineHeight = 19.sp,
@@ -128,30 +134,13 @@ fun PatientDeviceGuide(
 
 
 // =====================================================
-// TÍTULO DE SECÇÃO
+// CARTÃO DE INSTRUÇÕES
 // =====================================================
 
 @Composable
-private fun GuideSectionTitle(
-    titulo: String
-) {
-
-    Text(
-        text = titulo,
-        fontSize = 17.sp,
-        fontWeight = FontWeight.Bold,
-        color = SyncoWatchColors.AzulPetroleo,
-        modifier = Modifier.padding(bottom = 12.dp)
-    )
-}
-
-
-// =====================================================
-// CARTÃO DE INFORMAÇÃO
-// =====================================================
-
-@Composable
-private fun GuideCard(
+private fun GuideStepCard(
+    numero: String,
+    titulo: String,
     texto: String
 ) {
 
@@ -166,12 +155,55 @@ private fun GuideCard(
         )
     ) {
 
-        Text(
-            text = texto,
-            modifier = Modifier.padding(18.dp),
-            fontSize = 13.sp,
-            lineHeight = 21.sp,
-            color = SyncoWatchColors.TextoPrincipal
-        )
+        Row(
+            modifier = Modifier.padding(18.dp)
+        ) {
+
+            // NÚMERO DO PASSO
+
+            Surface(
+                color = SyncoWatchColors.AzulClaro,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+
+                Box(
+                    modifier = Modifier.size(42.dp),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ) {
+
+                    Text(
+                        text = numero,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SyncoWatchColors.AzulPetroleo
+                    )
+                }
+            }
+
+            Spacer(Modifier.width(14.dp))
+
+            // INSTRUÇÃO
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+
+                Text(
+                    text = titulo,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = SyncoWatchColors.AzulPetroleo
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    text = texto,
+                    fontSize = 13.sp,
+                    lineHeight = 20.sp,
+                    color = SyncoWatchColors.TextoPrincipal
+                )
+            }
+        }
     }
 }

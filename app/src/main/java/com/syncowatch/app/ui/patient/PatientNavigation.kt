@@ -1,3 +1,4 @@
+
 package com.syncowatch.app.ui.patient
 
 import androidx.compose.foundation.layout.*
@@ -19,7 +20,14 @@ fun PatientNavigation(
 ) {
 
     var separadorAtual by rememberSaveable {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
+    }
+
+    // Permite regressar à página principal dos separadores
+    // Médico e Mais ao clicar novamente no separador ativo.
+
+    var reiniciarSeparador by rememberSaveable {
+        mutableIntStateOf(0)
     }
 
     val separadores = listOf(
@@ -53,7 +61,22 @@ fun PatientNavigation(
                         selected = separadorAtual == indice,
 
                         onClick = {
-                            separadorAtual = indice
+
+                            if (separadorAtual == indice) {
+
+                                // Ao clicar novamente em Médico ou Mais,
+                                // regressa à página principal do separador.
+
+                                if (indice == 3 || indice == 4) {
+                                    reiniciarSeparador++
+                                }
+
+                            } else {
+
+                                // Navegação normal entre separadores.
+
+                                separadorAtual = indice
+                            }
                         },
 
                         icon = {
@@ -92,45 +115,40 @@ fun PatientNavigation(
 
             when (separadorAtual) {
 
+                // INÍCIO
+
                 0 -> PatientDashboard()
+
+                // HISTÓRICO
 
                 1 -> PatientHistory()
 
+                // ALERTAS
+
                 2 -> PatientAlerts()
 
-                3 -> PatientDoctor()
+                // MÉDICO
 
-                4 -> PatientMore(
-                    onTerminarSessao = onTerminarSessao
-                )
+                3 -> {
+
+                    key(reiniciarSeparador) {
+
+                        PatientDoctor()
+                    }
+                }
+
+                // MAIS
+
+                4 -> {
+
+                    key(reiniciarSeparador) {
+
+                        PatientMore(
+                            onTerminarSessao = onTerminarSessao
+                        )
+                    }
+                }
             }
         }
-    }
-}
-
-
-@Composable
-private fun PaginaProvisoria(titulo: String) {
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-
-        Text(
-            text = titulo,
-            fontSize = 27.sp,
-            fontWeight = FontWeight.Bold,
-            color = SyncoWatchColors.AzulPetroleo
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Text(
-            text = "Página em desenvolvimento",
-            fontSize = 15.sp,
-            color = SyncoWatchColors.TextoSecundario
-        )
     }
 }

@@ -1,3 +1,4 @@
+
 package com.syncowatch.app.ui.caregiver
 
 import androidx.compose.foundation.background
@@ -8,11 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.syncowatch.app.ui.login.ChangePasswordScreen
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.syncowatch.app.ui.SyncoWatchColors
+import com.syncowatch.app.ui.login.ChangePasswordScreen
+import com.syncowatch.app.ui.patient.PatientSettings
 
 
 // =====================================================
@@ -25,6 +27,13 @@ fun CaregiverNavigation(
 ) {
 
     var separadorAtual by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+
+    // Permite regressar à página principal de Mais
+    // ao clicar novamente no separador ativo.
+
+    var reiniciarSeparador by rememberSaveable {
         mutableIntStateOf(0)
     }
 
@@ -55,7 +64,22 @@ fun CaregiverNavigation(
                         selected = separadorAtual == indice,
 
                         onClick = {
-                            separadorAtual = indice
+
+                            if (separadorAtual == indice) {
+
+                                // Ao clicar novamente em Mais,
+                                // regressa ao menu principal.
+
+                                if (indice == 2) {
+                                    reiniciarSeparador++
+                                }
+
+                            } else {
+
+                                // Navegação normal entre separadores.
+
+                                separadorAtual = indice
+                            }
                         },
 
                         icon = {
@@ -94,13 +118,25 @@ fun CaregiverNavigation(
 
             when (separadorAtual) {
 
+                // ALERTAS
+
                 0 -> CaregiverAlerts()
+
+                // PACIENTES
 
                 1 -> CaregiverPatients()
 
-                2 -> CaregiverMore(
-                    onTerminarSessao = onTerminarSessao
-                )
+                // MAIS
+
+                2 -> {
+
+                    key(reiniciarSeparador) {
+
+                        CaregiverMore(
+                            onTerminarSessao = onTerminarSessao
+                        )
+                    }
+                }
             }
         }
     }
@@ -121,6 +157,8 @@ private fun CaregiverMore(
     }
 
     when (ecraAtual) {
+
+        // PÁGINA PRINCIPAL
 
         "principal" -> {
 
@@ -186,6 +224,8 @@ private fun CaregiverMore(
             }
         }
 
+        // PERFIL DO CUIDADOR
+
         "perfil" -> {
 
             CaregiverProfile(
@@ -194,6 +234,8 @@ private fun CaregiverMore(
                 }
             )
         }
+
+        // ALTERAR PALAVRA-PASSE
 
         "password" -> {
 
@@ -206,13 +248,15 @@ private fun CaregiverMore(
             )
         }
 
+        // DEFINIÇÕES DO CUIDADOR
+
         "definicoes" -> {
 
-            CaregiverSimplePage(
-                titulo = "Definições",
+            PatientSettings(
                 onVoltar = {
                     ecraAtual = "principal"
-                }
+                },
+                tipoUtilizador = "cuidador"
             )
         }
     }
@@ -243,47 +287,6 @@ private fun CaregiverMenuButton(
             modifier = Modifier.padding(20.dp),
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
-            color = SyncoWatchColors.AzulPetroleo
-        )
-    }
-}
-
-
-// =====================================================
-// PÁGINAS DO MENU MAIS
-// =====================================================
-
-@Composable
-private fun CaregiverSimplePage(
-    titulo: String,
-    onVoltar: () -> Unit
-) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SyncoWatchColors.Fundo)
-            .padding(horizontal = 20.dp)
-    ) {
-
-        Spacer(Modifier.height(20.dp))
-
-        TextButton(
-            onClick = onVoltar
-        ) {
-
-            Text(
-                text = "‹ Voltar",
-                color = SyncoWatchColors.AzulPetroleo
-            )
-        }
-
-        Spacer(Modifier.height(15.dp))
-
-        Text(
-            text = titulo,
-            fontSize = 27.sp,
-            fontWeight = FontWeight.Bold,
             color = SyncoWatchColors.AzulPetroleo
         )
     }
